@@ -1,18 +1,25 @@
 import requests
 
-url = "http://127.0.0.1:8000/landlords/"
-
-landlord_data = {
-    "name": "Matt osgood",
-    "email": "johnrob@example.com",
-    "phone": "123-456-7890",
-    "password": "Matthew"
+# Define your endpoint and the payload (data to send)
+url = "http://127.0.0.1:8000/createLandLord"
+payload = {
+    "FirstName": "Alice",
+    "LastName": "Smith",
+    "Email": "alice@example.com",
+    "Password": "password123",
+    "Plan": "Premium",
+    "Status": True,
+    "ExpirationDate": "2025-12-31"
 }
-print("Landlord data being inserted:", landlord_data)
 
-response = requests.post(url, json=landlord_data)
+response = requests.post(url, json=payload)
 
-if response.status_code == 200:
-    print("Landlord created successfully:", response.json())
-else:
-    print("Failed to create landlord:", response.status_code, response.text)
+# Print the raw response content
+print("Response status code:", response.status_code)
+print("Response text:", response.text)  # Print the raw text body of the response
+
+try:
+    # Try to parse JSON if the response is in JSON format
+    print("Response JSON:", response.json())
+except ValueError as e:
+    print("Error parsing JSON:", e)

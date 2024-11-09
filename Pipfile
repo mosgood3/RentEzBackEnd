@@ -8,6 +8,9 @@ fastapi = "*"
 uvicorn = "*"
 requests = "*"
 bcrypt = "*"
+httpx = "*"
+supabase = "*"
+python-decouple = "*"
 
 [dev-packages]
 
