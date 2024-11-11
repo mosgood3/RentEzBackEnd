@@ -4,13 +4,9 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-fastapi = "*"
-uvicorn = "*"
-requests = "*"
-bcrypt = "*"
-httpx = "*"
 supabase = "*"
-python-decouple = "*"
+fastapi = "*"
+python-dotenv = "*"
 
 [dev-packages]
 

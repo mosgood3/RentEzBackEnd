@@ -1,13 +1,10 @@
-from fastapi import FastAPI
-from decouple import config
-from supabase import create_client, Client
+# app/main.py
 
-url = config("SupaBaseUrl")
-key = config("SupaBaseKey")
+from fastapi import FastAPI
+from app.api.api_001.endpoints import landlords
 
 app = FastAPI()
-supabase: Client = create_client(url, key)
 
-@app.get("/")
-def test():
-    return {"msg": "hello world"}
+# Include the users router with a prefix and tags for organization
+app.include_router(landlords.router, prefix="/v1", tags=["landlords"])
+
