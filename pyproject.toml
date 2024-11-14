@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "rentezbackend"
+version = "0.1.0"
+description = ""
+authors = ["mosgood3 <mattosgood7@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.13"
+fastapi = {extras = ["standard"], version = "^0.115.5"}
+supabase = "^2.10.0"
+python-dotenv = "^1.0.1"
+python-multipart = "^0.0.17"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+requests = "^2.32.3"
+pyjwt = "^2.9.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
