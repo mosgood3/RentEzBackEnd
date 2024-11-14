@@ -11,13 +11,6 @@ class LandlordCreate(BaseModel):
     Active: bool = True
 
 class LandlordResponse(BaseModel):
-    Id: str
-    FirstName: str
-    LastName: str
-    Email: EmailStr
-    PhoneNumber: str
-    Active: bool
-    ExpirationDate: date
     token: str
 
 
