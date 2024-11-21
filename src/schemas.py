@@ -7,7 +7,6 @@ class LandlordCreate(BaseModel):
     Email: EmailStr
     Plan: str
     Password: str
-    PhoneNumber: str
 
 class LandlordResponse(BaseModel):
     token: str
