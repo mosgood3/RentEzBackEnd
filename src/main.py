@@ -1,40 +1,38 @@
-# main.py
 from fastapi import FastAPI, HTTPException
-from schemas import LandlordCreate, LandlordResponse
-from fastapi.middleware.cors import CORSMiddleware
-from crud import create_landlord
-from auth import create_jwt_token
+from pydantic import BaseModel, EmailStr
+import requests
+from config import SUPABASE_KEY, SUPABASE_URL
 
 app = FastAPI()
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # You can use ["*"] to allow all origins, but it's more secure to restrict this
-    allow_credentials=True,
-    allow_methods=["*"],  # Allow all methods (GET, POST, etc.)
-    allow_headers=["*"],  # Allow all headers
-)
+class UserSignUp(BaseModel):
+    email: EmailStr
+    password: str
+    name: str
 
+@app.post("/signup")
+async def signup_user(data: UserSignUp):
+    # Headers for Supabase authentication
+    headers = {
+        "apikey": SUPABASE_KEY,
+        "Authorization": f"Bearer {SUPABASE_KEY}"
+    }
 
-@app.post("/landlords/signup", response_model=LandlordResponse)
-def signup_landlord(landlord: LandlordCreate):
-    landlord_data = landlord.model_dump()  # Convert Pydantic model to dictionary
+    # Payload for creating a user in auth.users
+    auth_payload = {
+        "email": data.email,
+        "password": data.password,
+        "Display name": data.name
+    }
 
-    try:
-        # Create landlord in database
-        created_landlord = create_landlord(landlord_data)
-        
-        # Generate JWT token using the manually created Id
-        token = create_jwt_token(created_landlord["Id"])
-        print("Generated JWT Token:", token)  # Debug: Check if token is generated
-        
-        # Add Id and createdat to response for consistency
-        return LandlordResponse(Id=created_landlord["Id"], createdat=created_landlord["CreatedAt"], token=token)
-    
-    except Exception as e:
-        print(f"Error during landlord signup: {str(e)}")
-        raise HTTPException(status_code=500, detail="Internal Server Error")
+    # Create user in auth.users
+    response = requests.post(f"{SUPABASE_URL}/auth/v1/signup", json=auth_payload, headers=headers)
 
+    if response.status_code != 200:
+        # Return error message if the request fails
+        raise HTTPException(status_code=response.status_code, detail=response.json())
+
+    return {"message": "User created successfully. Please confirm your email."}
 
 
 
